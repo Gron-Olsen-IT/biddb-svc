@@ -36,7 +36,6 @@ public class RabbitMQBot
         {
             var body = ea.Body.ToArray();
             message = Encoding.UTF8.GetString(body);
-            Console.WriteLine($" [x] Received: '{message}'");
             
         };
         channel.BasicConsume(queue: messageQueue,

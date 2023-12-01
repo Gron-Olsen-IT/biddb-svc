@@ -20,22 +20,14 @@ public class BiddbWorker : BackgroundService
         _logger.LogInformation("BiddbWorker running at: {time}", DateTimeOffset.Now);
         while (!stoppingToken.IsCancellationRequested)
         {
-            try
+            _logger.LogInformation("BiddbWorker task doing background work.");
+            Bid? message = _rabbitMQBot.CheckForMessage("bid");
+            if (message != null)
             {
-                _logger.LogInformation("BiddbWorker task doing background work.");
-                Bid? message = _rabbitMQBot.CheckForMessage("bid");
-                if (message != null)
-                {
-                    _logger.LogInformation($"Received message from bid: {message}");
-                    await _repo.AddBid(message);
-                }
-                await Task.Delay(5000, stoppingToken);
+                _logger.LogInformation($"Received message from bid: {message}");
+                await _repo.AddBid(message);
             }
-            catch (Exception e)
-            {
-                _logger.LogError("Something is wrong with the message", e);
-            }
-
+            await Task.Delay(5000, stoppingToken);
         }
     }
 }
