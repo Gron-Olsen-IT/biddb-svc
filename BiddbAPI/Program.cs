@@ -1,38 +1,24 @@
 
 using NLog;
 using NLog.Web;
+using BiddbAPI.Services;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
 
 try
 {
-    var builder = WebApplication.CreateBuilder(args);
-
-    // Add services to the container.
-
-    builder.Services.AddControllers();
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-
-    var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
+    IHost host = Host.CreateDefaultBuilder(args)
+    .ConfigureServices(services =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+        services.AddHostedService<BiddbWorker>();
+        services.AddScoped<IRepo, RepoMongo>();
+    })
+    .Build();
 
-    app.UseHttpsRedirection();
-
-    app.UseAuthorization();
-
-    app.MapControllers();
-
-    app.Run();
-}catch(Exception ex)
+host.Run();
+}
+catch(Exception ex)
 {
     logger.Error(ex, "Stopped program because of exception");
     throw;
