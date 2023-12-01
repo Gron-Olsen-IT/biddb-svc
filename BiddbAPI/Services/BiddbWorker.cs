@@ -8,12 +8,11 @@ public class BiddbWorker : BackgroundService
     private readonly IRepo _repo;
     private readonly RabbitMQBot _rabbitMQBot;
 
-    public BiddbWorker(ILogger<BiddbWorker> logger, ILogger<RabbitMQBot> loggerRabbitMQBot, IRepo repo)
+    public BiddbWorker(ILogger<BiddbWorker> logger, ILogger<RabbitMQBot> loggerRabbitMQBot, IRepo repo, RabbitMQBot rabbitMQBot)
     {
         _repo = repo;
         _logger = logger;
-        string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost";
-        _rabbitMQBot = new RabbitMQBot(hostName, loggerRabbitMQBot);
+        _rabbitMQBot = rabbitMQBot;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

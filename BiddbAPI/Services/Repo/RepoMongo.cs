@@ -18,7 +18,7 @@ public class RepoMongo : IRepo {
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError("Something is wrong with the IP-address", e);
         }
         try
         {

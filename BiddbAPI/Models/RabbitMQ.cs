@@ -10,9 +10,9 @@ public class RabbitMQBot
     public string _hostName { get; set; }
     private readonly ILogger<RabbitMQBot> _logger;
 
-    public RabbitMQBot(string hostName, ILogger<RabbitMQBot> logger)
+    public RabbitMQBot(ILogger<RabbitMQBot> logger)
     {
-        _hostName = hostName;
+        _hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost";
         _logger = logger;
     }
 
@@ -20,7 +20,6 @@ public class RabbitMQBot
     public Bid CheckForMessage(string messageQueue)
     {
         var factory = new ConnectionFactory { HostName = _hostName };
-        _logger.LogInformation($"Biddb connecting to RabbitMQ at {_hostName}");
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 

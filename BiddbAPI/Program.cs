@@ -2,6 +2,7 @@
 using NLog;
 using NLog.Web;
 using BiddbAPI.Services;
+using BiddbAPI.Models;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -13,6 +14,7 @@ try
     {
         services.AddHostedService<BiddbWorker>();
         services.AddScoped<IRepo, RepoMongo>();
+        services.AddSingleton<RabbitMQBot>();
     })
     .Build();
 
