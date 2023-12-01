@@ -48,8 +48,6 @@ public class RabbitMQBot
             }
             
         };
-        
-
         channel.BasicConsume(queue: messageQueue,
                              autoAck: true,
                              consumer: consumer);

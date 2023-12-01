@@ -18,9 +18,9 @@ try
     })
     .Build();
 
-host.Run(); // Run the application
+    host.Run(); // Run the application
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     logger.Error(ex, "Stopped program because of exception");
     throw;
