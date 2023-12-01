@@ -5,13 +5,13 @@ using BiddbAPI.Models;
 public class BiddbWorker : BackgroundService
 {
     private readonly ILogger<BiddbWorker> _logger;
-    //private readonly IRepo _repo;
+    private readonly IRepo _repo;
     private readonly RabbitMQBot _rabbitMQBot;
 
-    public BiddbWorker(ILogger<BiddbWorker> logger,/* IRepo repo,*/ RabbitMQBot rabbitMQBot)
+    public BiddbWorker(ILogger<BiddbWorker> logger, IRepo repo, RabbitMQBot rabbitMQBot)
     {
         _logger = logger;
-        //_repo = repo;
+        _repo = repo;
         _rabbitMQBot = rabbitMQBot;
     }
 
@@ -27,7 +27,7 @@ public class BiddbWorker : BackgroundService
                 if (message != null)
                 {
                     _logger.LogInformation($"Received message from bid: {message}");
-                    //await _repo.AddBid(message);
+                    await _repo.AddBid(message);
                 }
                 await Task.Delay(5000, stoppingToken);
             }

@@ -40,7 +40,7 @@ public class RabbitMQBot
             {
                 bid = JsonSerializer.Deserialize<Bid>(message);
                 _logger.LogInformation($"Received message from {messageQueue}: {message}");
-
+                
             }
             catch (Exception e)
             {
