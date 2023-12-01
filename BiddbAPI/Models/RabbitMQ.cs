@@ -16,6 +16,7 @@ public class RabbitMQBot
         _hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost";
         _logger = logger;
         _factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
+        _logger.LogInformation($"RabbitMQBot created with hostname: {_hostName}");
     }
 
 

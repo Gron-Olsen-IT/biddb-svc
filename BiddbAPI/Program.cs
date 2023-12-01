@@ -13,7 +13,7 @@ try
     .ConfigureServices(services =>
     {
         services.AddHostedService<BiddbWorker>();
-        services.AddScoped<IRepo, RepoMongo>();
+        //services.AddScoped<IRepo, RepoMongo>();
         services.AddSingleton<RabbitMQBot>();
     })
     .Build();
