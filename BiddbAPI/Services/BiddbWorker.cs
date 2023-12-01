@@ -27,7 +27,7 @@ public class BiddbWorker : BackgroundService
                 _logger.LogInformation($"Received message from bid: {message}");
                 await _repo.AddBid(message);
             }
-            await Task.Delay(5000, stoppingToken);
+            await Task.Delay(10000, stoppingToken);
         }
     }
 }

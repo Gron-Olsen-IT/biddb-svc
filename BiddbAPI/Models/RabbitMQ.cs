@@ -9,18 +9,19 @@ public class RabbitMQBot
 {
     public string _hostName { get; }
     private readonly ILogger<RabbitMQBot> _logger;
+    private ConnectionFactory _factory;
 
     public RabbitMQBot(ILogger<RabbitMQBot> logger)
     {
         _hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost";
         _logger = logger;
+        _factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
     }
 
 
     public Bid? CheckForMessage(string messageQueue)
     {
-        var factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
-        using var connection = factory.CreateConnection();
+        using var connection = _factory.CreateConnection();
         using var channel = connection.CreateModel();
 
         string message = "";
