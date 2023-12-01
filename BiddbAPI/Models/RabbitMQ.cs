@@ -17,12 +17,13 @@ public class RabbitMQBot
     }
 
 
-    public Bid CheckForMessage(string messageQueue)
+    public Bid? CheckForMessage(string messageQueue)
     {
         var factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
+        string message = "";
 
         channel.QueueDeclare(queue: messageQueue,
                              durable: false,
@@ -30,29 +31,30 @@ public class RabbitMQBot
                              autoDelete: false,
                              arguments: null);
 
-        Bid? bid = null!;
         var consumer = new EventingBasicConsumer(channel);
         consumer.Received += (model, ea) =>
         {
             var body = ea.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-            try
-            {
-                bid = JsonSerializer.Deserialize<Bid>(message);
-                _logger.LogInformation($"Received message from {messageQueue}: {message}");
-                
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Something is wrong with the message", e);
-            }
+            message = Encoding.UTF8.GetString(body);
+            Console.WriteLine($" [x] Received: '{message}'");
             
         };
         channel.BasicConsume(queue: messageQueue,
                              autoAck: true,
                              consumer: consumer);
-        
-        return bid;
+        if (message == "")
+        {
+            return null;
+        }
+        try
+        {
+            return JsonSerializer.Deserialize<Bid>(message);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Something is wrong with the message", e);
+            return null;
+        }
 
     }
 }
