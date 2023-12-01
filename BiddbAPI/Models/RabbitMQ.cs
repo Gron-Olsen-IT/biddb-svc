@@ -9,19 +9,18 @@ public class RabbitMQBot
 {
     public string _hostName { get; set; }
     private readonly ILogger<RabbitMQBot> _logger;
-    private readonly IRepo _repo;
 
-    public RabbitMQBot(string hostName, ILogger<RabbitMQBot> logger, IRepo repo)
+    public RabbitMQBot(string hostName, ILogger<RabbitMQBot> logger)
     {
         _hostName = hostName;
         _logger = logger;
-        _repo = repo;
     }
 
 
-    public Bid CheckMessage(string messageQueue)
+    public Bid CheckForMessage(string messageQueue)
     {
         var factory = new ConnectionFactory { HostName = _hostName };
+        _logger.LogInformation($"Biddb connecting to RabbitMQ at {_hostName}");
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
