@@ -19,7 +19,7 @@ public class RabbitMQBot
 
     public Bid CheckForMessage(string messageQueue)
     {
-        var factory = new ConnectionFactory { HostName = _hostName };
+        var factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
