@@ -5,13 +5,15 @@ using BiddbAPI.Models;
 public class BiddbWorker : BackgroundService
 {
     private readonly ILogger<BiddbWorker> _logger;
+    private readonly IRepo _repo;
     private readonly RabbitMQBot _rabbitMQBot;
 
     public BiddbWorker(ILogger<BiddbWorker> logger, ILogger<RabbitMQBot> loggerRabbitMQBot, IRepo repo)
     {
+        _repo = repo;
         _logger = logger;
         string hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost";
-        _rabbitMQBot = new RabbitMQBot(hostName, loggerRabbitMQBot, repo);
+        _rabbitMQBot = new RabbitMQBot(hostName, loggerRabbitMQBot);
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -20,7 +22,12 @@ public class BiddbWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("BiddbWorker task doing background work.");
-            _rabbitMQBot.CheckMessage("bid");
+            Bid message = _rabbitMQBot.CheckForMessage("bid");
+            if (message != null)
+            {
+                _logger.LogInformation($"Received message from bid: {message}");
+                await _repo.AddBid(message);
+            }
             await Task.Delay(5000, stoppingToken);
         }
     }
