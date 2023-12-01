@@ -44,7 +44,7 @@ public class RepoMongo : IRepo {
     }
 
     public async Task<Bid> AddBid(Bid bid) {
-        await _collection.InsertOneAsync(bid);
+        await _collection!.InsertOneAsync(bid);
         return bid;
     }
 
