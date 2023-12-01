@@ -13,14 +13,14 @@ try
     .ConfigureServices(services =>
     {
         services.AddHostedService<BiddbWorker>();
-        services.AddScoped<IRepo, RepoMongo>();
+        //services.AddScoped<IRepo, RepoMongo>();
         services.AddSingleton<RabbitMQBot>();
     })
     .Build();
 
-host.Run();
+    host.Run(); // Run the application
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     logger.Error(ex, "Stopped program because of exception");
     throw;

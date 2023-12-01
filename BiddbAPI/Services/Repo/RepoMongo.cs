@@ -23,6 +23,8 @@ public class RepoMongo : IRepo {
         try
         {
             string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")! ?? "mongodb+srv://Boes24:vxeF7fR49HHPL75h6Lg5492Rx6v8BcdQ@gronolsen.5ub48h1.mongodb.net";
+            _logger.LogInformation($"Biddb-svc connecting to {connectionString}");
+            
             var mongoDatabase = new MongoClient(connectionString).GetDatabase("bid_db");
             _collection = mongoDatabase.GetCollection<Bid>("bids");
 

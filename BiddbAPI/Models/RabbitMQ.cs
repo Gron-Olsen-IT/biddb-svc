@@ -7,7 +7,7 @@ using RabbitMQ.Client.Events;
 namespace BiddbAPI.Models;
 public class RabbitMQBot
 {
-    public string _hostName { get; set; }
+    public string _hostName { get; }
     private readonly ILogger<RabbitMQBot> _logger;
 
     public RabbitMQBot(ILogger<RabbitMQBot> logger)
@@ -19,7 +19,7 @@ public class RabbitMQBot
 
     public Bid CheckForMessage(string messageQueue)
     {
-        var factory = new ConnectionFactory { HostName = _hostName };
+        var factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
@@ -48,8 +48,6 @@ public class RabbitMQBot
             }
             
         };
-        
-
         channel.BasicConsume(queue: messageQueue,
                              autoAck: true,
                              consumer: consumer);

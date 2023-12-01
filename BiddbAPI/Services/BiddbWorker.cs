@@ -5,13 +5,13 @@ using BiddbAPI.Models;
 public class BiddbWorker : BackgroundService
 {
     private readonly ILogger<BiddbWorker> _logger;
-    private readonly IRepo _repo;
+    //private readonly IRepo _repo;
     private readonly RabbitMQBot _rabbitMQBot;
 
-    public BiddbWorker(ILogger<BiddbWorker> logger, ILogger<RabbitMQBot> loggerRabbitMQBot, IRepo repo, RabbitMQBot rabbitMQBot)
+    public BiddbWorker(ILogger<BiddbWorker> logger,/* IRepo repo,*/ RabbitMQBot rabbitMQBot)
     {
-        _repo = repo;
         _logger = logger;
+        //_repo = repo;
         _rabbitMQBot = rabbitMQBot;
     }
 
@@ -20,14 +20,22 @@ public class BiddbWorker : BackgroundService
         _logger.LogInformation("BiddbWorker running at: {time}", DateTimeOffset.Now);
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("BiddbWorker task doing background work.");
-            Bid message = _rabbitMQBot.CheckForMessage("bid");
-            if (message != null)
+            try
             {
-                _logger.LogInformation($"Received message from bid: {message}");
-                await _repo.AddBid(message);
+                _logger.LogInformation("BiddbWorker task doing background work.");
+                Bid? message = _rabbitMQBot.CheckForMessage("bid");
+                if (message != null)
+                {
+                    _logger.LogInformation($"Received message from bid: {message}");
+                    //await _repo.AddBid(message);
+                }
+                await Task.Delay(5000, stoppingToken);
             }
-            await Task.Delay(5000, stoppingToken);
+            catch (Exception e)
+            {
+                _logger.LogError("Something is wrong with the message", e);
+            }
+
         }
     }
 }
