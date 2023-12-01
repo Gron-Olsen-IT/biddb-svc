@@ -8,7 +8,7 @@ public class BiddbWorker : BackgroundService
     //private readonly IRepo _repo;
     private readonly RabbitMQBot _rabbitMQBot;
 
-    public BiddbWorker(ILogger<BiddbWorker> logger, IRepo repo, RabbitMQBot rabbitMQBot)
+    public BiddbWorker(ILogger<BiddbWorker> logger, RabbitMQBot rabbitMQBot)
     {
         _logger = logger;
         //_repo = repo;
