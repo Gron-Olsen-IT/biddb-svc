@@ -3,10 +3,11 @@ using NLog;
 using NLog.Web;
 using BiddbAPI.Services;
 using BiddbAPI.Models;
+using System.Threading.RateLimiting;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
-
+Task.Delay(5000).Wait();
 try
 {
     IHost host = Host.CreateDefaultBuilder(args)
