@@ -10,21 +10,21 @@ namespace BiddbAPI.Tests;
 
 
 [TestFixture]
-public class BiddbWorkerAddBid
+public class BidDbWorkerAddBid
 {
-    private Mock<ILogger<BiddbWorker>> _mockLogger;
-    private Mock<IRepo> _mockRepo;
+    private Mock<ILogger<BidDbWorker>> _mockLogger;
+    private Mock<IBidDbRepo> _mockRepo;
     private Mock<IRabbitMQBot> _mockRabbitMQBot;
-    private BiddbWorker _worker;
+    private BidDbWorker _worker;
 
     [SetUp]
     public void Setup()
     {
-        _mockLogger = new Mock<ILogger<BiddbWorker>>();
-        _mockRepo = new Mock<IRepo>();
+        _mockLogger = new Mock<ILogger<BidDbWorker>>();
+        _mockRepo = new Mock<IBidDbRepo>();
         _mockRabbitMQBot = new Mock<IRabbitMQBot>();
 
-        _worker = new BiddbWorker(_mockLogger.Object, _mockRabbitMQBot.Object, _mockRepo.Object);
+        _worker = new BidDbWorker(_mockLogger.Object, _mockRabbitMQBot.Object, _mockRepo.Object);
     }
 
     [Test]
