@@ -1,7 +1,7 @@
 using System.Net;
-using BidDbAPI.Models;
+using BiddbAPI.Models;
 
-namespace BidDbAPI.Services;
+namespace BiddbAPI.Services;
 
 
 public interface IInfraRepo

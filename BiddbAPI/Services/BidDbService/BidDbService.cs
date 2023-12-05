@@ -1,7 +1,7 @@
 
-using BidDbAPI.Models;
+using BiddbAPI.Models;
 
-namespace BidDbAPI.Services;
+namespace BiddbAPI.Services;
 
 public class BidDbService : IBidDbService
 {

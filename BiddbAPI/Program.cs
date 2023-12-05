@@ -1,8 +1,8 @@
 
 using NLog;
 using NLog.Web;
-using BidDbAPI.Services;
-using BidDbAPI.Models;
+using BiddbAPI.Services;
+using BiddbAPI.Models;
 using System.Threading.RateLimiting;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();

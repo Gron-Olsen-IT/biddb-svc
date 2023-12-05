@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace BidDbAPI.Models;
+namespace BiddbAPI.Models;
 public class Bid
 {
 
