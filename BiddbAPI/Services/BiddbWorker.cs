@@ -1,31 +1,31 @@
 
-namespace BiddbAPI.Services;
-using BiddbAPI.Models;
+namespace BidDbAPI.Services;
+using BidDbAPI.Models;
 
-public class BiddbWorker : BackgroundService
+public class BidDbWorker : BackgroundService
 {
-    private readonly ILogger<BiddbWorker> _logger;
-    private readonly IRepo _repo;
+    private readonly ILogger<BidDbWorker> _logger;
+    private readonly IBidDbRepo _bidDbRepo;
     private readonly IRabbitMQBot _rabbitMQBot;
 
-    public BiddbWorker(ILogger<BiddbWorker> logger, IRabbitMQBot rabbitMQBot, IRepo repo)
+    public BidDbWorker(ILogger<BidDbWorker> logger, IRabbitMQBot rabbitMQBot, IBidDbRepo bidDbRepo)
     {
         _logger = logger;
-        _repo = repo;
+        _bidDbRepo = bidDbRepo;
         _rabbitMQBot = rabbitMQBot;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("BiddbWorker running at: {time}", DateTimeOffset.Now);
+        _logger.LogInformation("BidDbWorker running at: {time}", DateTimeOffset.Now);
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("BiddbWorker task doing background work.");
+            _logger.LogInformation("BidDbWorker task doing background work.");
             Bid? message = _rabbitMQBot.CheckForMessage("bid");
             if (message != null)
             {
                 _logger.LogInformation($"Received message from bid: {message}");
-                await _repo.AddBid(message);
+                await _bidDbRepo.AddBid(message);
             }
             await Task.Delay(10000, stoppingToken);
         }

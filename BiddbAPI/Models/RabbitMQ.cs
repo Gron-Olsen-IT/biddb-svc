@@ -1,10 +1,10 @@
 using System.Text;
 using System.Text.Json;
-using BiddbAPI.Services;
+using BidDbAPI.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace BiddbAPI.Models;
+namespace BidDbAPI.Models;
 public class RabbitMQBot : IRabbitMQBot
 {
     public string _hostName { get; }
