@@ -15,7 +15,7 @@ try
     {
         services.AddHostedService<BiddbWorker>();
         services.AddScoped<IRepo, RepoMongo>();
-        services.AddSingleton<RabbitMQBot>();
+        services.AddSingleton<IRabbitMQBot>();
     })
     .Build();
 

@@ -5,7 +5,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace BiddbAPI.Models;
-public class RabbitMQBot
+public class RabbitMQBot : IRabbitMQBot
 {
     public string _hostName { get; }
     private readonly ILogger<RabbitMQBot> _logger;
