@@ -1,8 +1,8 @@
 using System.Net;
-using BidDbAPI.Models;
+using BiddbAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BidDbAPI.Services;
+namespace BiddbAPI.Services;
 
 public class InfraRepo : IInfraRepo
 {

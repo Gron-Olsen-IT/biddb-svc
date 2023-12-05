@@ -1,6 +1,6 @@
 
-namespace BidDbAPI.Services;
-using BidDbAPI.Models;
+namespace BiddbAPI.Services;
+using BiddbAPI.Models;
 
 public class BidDbWorker : BackgroundService
 {
