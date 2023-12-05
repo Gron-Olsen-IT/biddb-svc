@@ -1,6 +1,6 @@
-namespace BiddbAPI.Services;
-using BiddbAPI.Models;
-public interface IRepo
+namespace BidDbAPI.Services;
+using BidDbAPI.Models;
+public interface IBidDbRepo
 {
     Task<IEnumerable<Bid>> GetBids();
     Task<Bid> GetBid(string id);

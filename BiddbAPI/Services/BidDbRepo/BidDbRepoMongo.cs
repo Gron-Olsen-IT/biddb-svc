@@ -1,13 +1,13 @@
-namespace BiddbAPI.Services;
-using BiddbAPI.Models;
+namespace BidDbAPI.Services;
+using BidDbAPI.Models;
 using MongoDB.Driver;
 
 
-public class RepoMongo : IRepo {
+public class BidDbRepoMongo : IBidDbRepo {
     private readonly IMongoCollection<Bid>? _collection;
-    private readonly ILogger<RepoMongo> _logger;
+    private readonly ILogger<BidDbRepoMongo> _logger;
 
-    public RepoMongo(ILogger<RepoMongo> logger) {
+    public BidDbRepoMongo(ILogger<BidDbRepoMongo> logger) {
         _logger = logger;
         try
         {

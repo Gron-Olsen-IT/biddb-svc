@@ -1,8 +1,8 @@
 
 using NLog;
 using NLog.Web;
-using BiddbAPI.Services;
-using BiddbAPI.Models;
+using BidDbAPI.Services;
+using BidDbAPI.Models;
 using System.Threading.RateLimiting;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
@@ -13,8 +13,8 @@ try
     IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<BiddbWorker>();
-        services.AddScoped<IRepo, RepoMongo>();
+        services.AddHostedService<BidDbWorker>();
+        services.AddScoped<IBidDbRepo, BidDbRepoMongo>();
         services.AddSingleton<IRabbitMQBot>();
     })
     .Build();
