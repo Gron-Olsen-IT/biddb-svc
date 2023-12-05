@@ -31,7 +31,7 @@ public class BidDbWorkerAddBid
     public async Task WhenMessageReceived_ShouldAddBid()
     {
         // Arrange
-        var bid = new Bid("1", "1", 1000, DateTime.Now);
+        var bid = new Bid(new("1", "1", 1000, DateTime.Now));
         _mockRabbitMQBot.Setup(bot => bot.CheckForMessage("bid")).Returns(bid);
         bid.Id = "1";
         _mockRepo.Setup(repo => repo.AddBid(It.IsAny<Bid>())).ReturnsAsync(bid);
