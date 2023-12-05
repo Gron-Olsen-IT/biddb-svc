@@ -6,7 +6,15 @@ namespace BiddbAPI.Services;
 
 public class InfraRepo : IInfraRepo
 {
-    private readonly string INFRA_CONN = Environment.GetEnvironmentVariable("INFRA_CONN") ?? "http://localhost:5000/api/infra/";
+    private readonly ILogger<InfraRepo> _logger;
+    private readonly string? INFRA_CONN;
+
+    public InfraRepo(ILogger<InfraRepo> logger, IConfiguration configuration)
+    {
+        _logger = logger;
+        INFRA_CONN = configuration["INFRA_CONN"];
+    }
+    
     public async Task<HttpStatusCode> UpdateMaxBid(string auctionId, int maxBid)
     {
         try
@@ -17,7 +25,7 @@ public class InfraRepo : IInfraRepo
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e.Message);
             throw new Exception(e.Message);
         }
 
@@ -33,7 +41,7 @@ public class InfraRepo : IInfraRepo
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e.Message);
             throw new Exception(e.Message);
         }
 
