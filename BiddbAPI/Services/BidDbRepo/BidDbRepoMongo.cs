@@ -1,4 +1,4 @@
-namespace BidDbAPI.Services;
+namespace BiddbAPI.Services;
 using BiddbAPI.Models;
 using MongoDB.Driver;
 
