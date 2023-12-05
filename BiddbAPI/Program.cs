@@ -7,7 +7,7 @@ using System.Threading.RateLimiting;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
-Task.Delay(20000).Wait();
+//Task.Delay(20000).Wait();
 try
 {
     IHost host = Host.CreateDefaultBuilder(args)
@@ -15,7 +15,7 @@ try
     {
         services.AddHostedService<BidDbWorker>();
         services.AddScoped<IBidDbRepo, BidDbRepoMongo>();
-        services.AddSingleton<IRabbitMQBot>();
+        services.AddScoped<IRabbitMQBot, RabbitMQBot>();
     })
     .Build();
 

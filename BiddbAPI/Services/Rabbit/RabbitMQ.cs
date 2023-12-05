@@ -7,13 +7,13 @@ using RabbitMQ.Client.Events;
 namespace BiddbAPI.Models;
 public class RabbitMQBot : IRabbitMQBot
 {
-    public string _hostName { get; }
+    public string? _hostName;
     private readonly ILogger<RabbitMQBot> _logger;
     private ConnectionFactory _factory;
 
-    public RabbitMQBot(ILogger<RabbitMQBot> logger)
+    public RabbitMQBot(ILogger<RabbitMQBot> logger, IConfiguration configuration)
     {
-        _hostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost";
+        _hostName = configuration["RABBITMQ_HOSTNAME"];
         _logger = logger;
         _factory = new ConnectionFactory { HostName = _hostName, Port = 5672, UserName = "guest", Password = "guest" };
         _logger.LogInformation($"RabbitMQBot created with hostname: {_hostName}");
