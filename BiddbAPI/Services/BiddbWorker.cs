@@ -21,7 +21,7 @@ public class BidDbWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("BidDbWorker task doing background work.");
-            Bid? message = _rabbitMQBot.CheckForMessage("bid");
+            Bid? message = await _rabbitMQBot.CheckForMessage("bid");
             if (message != null)
             {
                 _logger.LogInformation($"Received message from bid: {message}");
