@@ -29,7 +29,7 @@ public class RabbitMQBot : IRabbitMQBot
         var tcs = new TaskCompletionSource<Bid>();
 
         //string message = "";
-        Bid bid = null!;
+        //Bid bid = null!;
 
         channel.QueueDeclare(queue: messageQueue,
                              durable: false,

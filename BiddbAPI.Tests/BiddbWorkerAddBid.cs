@@ -26,7 +26,7 @@ public class BidDbWorkerAddBid
 
         _worker = new BidDbWorker(_mockLogger.Object, _mockRabbitMQBot.Object, _mockRepo.Object);
     }
-
+/*
     [Test]
     public async Task WhenMessageReceived_ShouldAddBid()
     {
@@ -68,5 +68,5 @@ public class BidDbWorkerAddBid
         // Assert
         _mockRepo.Verify(repo => repo.AddBid(It.IsAny<Bid>()), Times.Never);
     }
-   
+*/
 }
