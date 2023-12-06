@@ -34,7 +34,7 @@ public class BidDbWorker : BackgroundService
                     _logger.LogError(e.Message);
                 }
             }
-            await Task.Delay(10000, stoppingToken);
+            await Task.Delay(500, stoppingToken);
         }
     }
 }
