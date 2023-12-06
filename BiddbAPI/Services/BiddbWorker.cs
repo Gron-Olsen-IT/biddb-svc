@@ -24,8 +24,15 @@ public class BidDbWorker : BackgroundService
             BidDTO? message = await _rabbitMQBot.CheckForMessage("bid");
             if (message != null)
             {
-                _logger.LogInformation($"Received message from bid: {message}");
-                await _bidDbService.Post(message);
+                try
+                {
+                    _logger.LogInformation($"Received message from bid: {message}");
+                    await _bidDbService.Post(message);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.Message);
+                }
             }
             await Task.Delay(10000, stoppingToken);
         }
