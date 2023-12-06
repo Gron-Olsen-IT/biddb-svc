@@ -38,7 +38,7 @@ public class InfraRepo : IInfraRepo
         try
         {
             HttpClient httpClient = new();
-            var response = await httpClient.GetFromJsonAsync<BidDTO>($"{INFRA_CONN}/bids/{auctionId}");
+            var response = await httpClient.GetFromJsonAsync<BidDTO>($"{INFRA_CONN}/max/{auctionId}");
             return response!;
         }
         catch (Exception e)
