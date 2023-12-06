@@ -16,6 +16,7 @@ public class BidDbWorkerAddBid
     private Mock<IBidDbRepo> _mockRepo;
     private Mock<IRabbitMQBot> _mockRabbitMQBot;
     private BidDbWorker _worker;
+    private Mock<IBidDbService> _mockService;
 
     [SetUp]
     public void Setup()
@@ -23,8 +24,9 @@ public class BidDbWorkerAddBid
         _mockLogger = new Mock<ILogger<BidDbWorker>>();
         _mockRepo = new Mock<IBidDbRepo>();
         _mockRabbitMQBot = new Mock<IRabbitMQBot>();
+        _mockService = new Mock<IBidDbService>();
 
-        _worker = new BidDbWorker(_mockLogger.Object, _mockRabbitMQBot.Object, _mockRepo.Object);
+        _worker = new BidDbWorker(_mockLogger.Object, _mockRabbitMQBot.Object, _mockService.Object);
     }
 /*
     [Test]
