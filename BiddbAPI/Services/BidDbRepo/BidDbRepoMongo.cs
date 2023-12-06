@@ -46,6 +46,7 @@ public class BidDbRepoMongo : IBidDbRepo {
     }
 
     public async Task<Bid> AddBid(Bid bid) {
+        _logger.LogInformation($"Mongo: Adding bid: {bid}");
         await _collection!.InsertOneAsync(bid);
         return bid;
     }

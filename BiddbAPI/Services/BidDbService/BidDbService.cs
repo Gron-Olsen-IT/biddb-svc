@@ -21,12 +21,13 @@ public class BidDbService : IBidDbService
     {
         try
         {
+            _logger.LogInformation($"DbService: Posting bid: {bidDTO}");
             Bid previousMaxBid = await _infraRepo.GetMaxBid(bidDTO.AuctionId);
             if(previousMaxBid.Offer >= bidDTO.Offer)
             {
                 throw new Exception("Offer is lower than current max bid");
             }
-            Bid postedBid = await _bidDbRepo.AddBid(new(bidDTO));
+            Bid postedBid = await _bidDbRepo.AddBid(new(bidDTO)) ?? throw new Exception("Bid was not posted");
             await _infraRepo.UpdateMaxBid(bidDTO.AuctionId, postedBid.Offer);
             return postedBid;
         }
