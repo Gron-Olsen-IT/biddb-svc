@@ -23,6 +23,7 @@ public class BidDbService : IBidDbService
         {
             _logger.LogInformation($"DbService: Posting bid: {bidDTO}");
             Bid previousMaxBid = await _infraRepo.GetMaxBid(bidDTO.AuctionId);
+            _logger.LogInformation($"DbService: Previous max bid: {previousMaxBid.Offer}");
             if(previousMaxBid.Offer >= bidDTO.Offer)
             {
                 throw new Exception("Offer is lower than current max bid");
