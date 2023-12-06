@@ -32,13 +32,13 @@ public class InfraRepo : IInfraRepo
 
     }
 
-    public async Task<Bid> GetMaxBid(string auctionId)
+    public async Task<BidDTO> GetMaxBid(string auctionId)
     {
         _logger.LogInformation($"InfraRepo: Getting max bid for auction: {auctionId}");
         try
         {
             HttpClient httpClient = new();
-            var response = await httpClient.GetFromJsonAsync<Bid>($"{INFRA_CONN}/bids/{auctionId}");
+            var response = await httpClient.GetFromJsonAsync<BidDTO>($"{INFRA_CONN}/bids/{auctionId}");
             return response!;
         }
         catch (Exception e)

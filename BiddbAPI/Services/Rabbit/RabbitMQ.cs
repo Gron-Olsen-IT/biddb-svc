@@ -20,13 +20,13 @@ public class RabbitMQBot : IRabbitMQBot
     }
 
 
-    public async Task<Bid?> CheckForMessage(string messageQueue)
+    public async Task<BidDTO?> CheckForMessage(string messageQueue)
     {
         _logger.LogInformation($"Checking for message in queue: {messageQueue}");
         using var connection = _factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        var tcs = new TaskCompletionSource<Bid>();
+        var tcs = new TaskCompletionSource<BidDTO>();
 
         channel.QueueDeclare(queue: messageQueue,
                              durable: false,
@@ -45,7 +45,7 @@ public class RabbitMQBot : IRabbitMQBot
                 var bidDTO = JsonSerializer.Deserialize<BidDTO>(message);
                 if (bidDTO != null)
                 {
-                    tcs.TrySetResult(new Bid(bidDTO));
+                    tcs.TrySetResult(bidDTO);
                 }
                 else
                 {
