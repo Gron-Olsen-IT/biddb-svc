@@ -37,7 +37,7 @@ public class InfraRepo : IInfraRepo
         try
         {
             HttpClient httpClient = new();
-            var response = await httpClient.GetAsync($"{INFRA_CONN}/bids/{auctionId}").Result.Content.ReadFromJsonAsync<Bid>();
+            var response = await httpClient.GetFromJsonAsync<Bid>($"{INFRA_CONN}/bids/{auctionId}");
             return response!;
         }
         catch (Exception e)
