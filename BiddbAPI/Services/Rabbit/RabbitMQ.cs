@@ -28,9 +28,6 @@ public class RabbitMQBot : IRabbitMQBot
 
         var tcs = new TaskCompletionSource<Bid>();
 
-        //string message = "";
-        //Bid bid = null!;
-
         channel.QueueDeclare(queue: messageQueue,
                              durable: false,
                              exclusive: false,
@@ -62,22 +59,6 @@ public class RabbitMQBot : IRabbitMQBot
                 tcs.TrySetException(e);
             }
 
-
-
-            /*if (message != "")
-            {
-                try
-                {
-                    _logger.LogInformation($"Message received: {message}");
-                    bid = new(JsonSerializer.Deserialize<BidDTO>(message)!);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError("Something is wrong with the message", e);
-                }
-            }
-            */
-
         };
         channel.BasicConsume(queue: messageQueue,
                              autoAck: true,
@@ -92,21 +73,5 @@ public class RabbitMQBot : IRabbitMQBot
             _logger.LogError("Something is wrong with the message", e);
             return null;
         }
-        /*                     
-        if (message == "")
-        {
-            _logger.LogInformation("Empty message received");
-            return null;
-        }
-        if (bid != null)
-        {
-            return bid;
-        }
-        else
-        {
-            _logger.LogError("Something is wrong with the message");
-            return null;
-        }
-        */
     }
 }
