@@ -20,13 +20,15 @@ public class RabbitMQBot : IRabbitMQBot
     }
 
 
-    public Bid? CheckForMessage(string messageQueue)
+    public async Task<Bid?> CheckForMessage(string messageQueue)
     {
         _logger.LogInformation($"Checking for message in queue: {messageQueue}");
         using var connection = _factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        string message = "";
+        var tcs = new TaskCompletionSource<Bid>();
+
+        //string message = "";
         Bid bid = null!;
 
         channel.QueueDeclare(queue: messageQueue,
@@ -39,8 +41,30 @@ public class RabbitMQBot : IRabbitMQBot
         consumer.Received += (model, ea) =>
         {
             var body = ea.Body.ToArray();
-            message = Encoding.UTF8.GetString(body);
-            if (message != "")
+            var message = Encoding.UTF8.GetString(body);
+
+            try
+            {
+                var bidDTO = JsonSerializer.Deserialize<BidDTO>(message);
+                if (bidDTO != null)
+                {
+                    tcs.TrySetResult(new Bid(bidDTO));
+                }
+                else
+                {
+                    tcs.TrySetResult(null!);
+                }
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Something is wrong with the message", e);
+                tcs.TrySetException(e);
+            }
+
+
+
+            /*if (message != "")
             {
                 try
                 {
@@ -52,11 +76,23 @@ public class RabbitMQBot : IRabbitMQBot
                     _logger.LogError("Something is wrong with the message", e);
                 }
             }
+            */
 
         };
         channel.BasicConsume(queue: messageQueue,
                              autoAck: true,
                              consumer: consumer);
+
+        try
+        {
+            return await tcs.Task;
+        }
+        catch(Exception e)
+        {
+            _logger.LogError("Something is wrong with the message", e);
+            return null;
+        }
+        /*                     
         if (message == "")
         {
             _logger.LogInformation("Empty message received");
@@ -71,5 +107,6 @@ public class RabbitMQBot : IRabbitMQBot
             _logger.LogError("Something is wrong with the message");
             return null;
         }
+        */
     }
 }
