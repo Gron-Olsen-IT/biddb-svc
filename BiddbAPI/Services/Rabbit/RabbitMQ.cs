@@ -27,6 +27,7 @@ public class RabbitMQBot : IRabbitMQBot
         using var channel = connection.CreateModel();
 
         string message = "";
+        Bid bid = null!;
 
         channel.QueueDeclare(queue: messageQueue,
                              durable: false,
@@ -39,7 +40,19 @@ public class RabbitMQBot : IRabbitMQBot
         {
             var body = ea.Body.ToArray();
             message = Encoding.UTF8.GetString(body);
-            
+            if (message != "")
+            {
+                try
+                {
+                    _logger.LogInformation($"Message received: {message}");
+                    bid = new(JsonSerializer.Deserialize<BidDTO>(message)!);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Something is wrong with the message", e);
+                }
+            }
+
         };
         channel.BasicConsume(queue: messageQueue,
                              autoAck: true,
@@ -49,16 +62,14 @@ public class RabbitMQBot : IRabbitMQBot
             _logger.LogInformation("Empty message received");
             return null;
         }
-        try
+        if (bid != null)
         {
-            _logger.LogInformation($"Message received: {message}");
-            return JsonSerializer.Deserialize<Bid>(message);
+            return bid;
         }
-        catch (Exception e)
+        else
         {
-            _logger.LogError("Something is wrong with the message", e);
+            _logger.LogError("Something is wrong with the message");
             return null;
         }
-
     }
 }
