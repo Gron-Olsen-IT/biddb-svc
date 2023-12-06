@@ -14,8 +14,11 @@ try
     .ConfigureServices(services =>
     {
         services.AddHostedService<BidDbWorker>();
+        services.AddScoped<IBidDbService, BidDbService>();
+        services.AddScoped<IInfraRepo, InfraRepo>();
         services.AddScoped<IBidDbRepo, BidDbRepoMongo>();
         services.AddScoped<IRabbitMQBot, RabbitMQBot>();
+        
     })
     .Build();
 
