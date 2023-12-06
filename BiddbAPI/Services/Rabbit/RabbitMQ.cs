@@ -22,6 +22,7 @@ public class RabbitMQBot : IRabbitMQBot
 
     public Bid? CheckForMessage(string messageQueue)
     {
+        _logger.LogInformation($"Checking for message in queue: {messageQueue}");
         using var connection = _factory.CreateConnection();
         using var channel = connection.CreateModel();
 
@@ -45,10 +46,12 @@ public class RabbitMQBot : IRabbitMQBot
                              consumer: consumer);
         if (message == "")
         {
+            _logger.LogInformation("Empty message received");
             return null;
         }
         try
         {
+            _logger.LogInformation($"Message received: {message}");
             return JsonSerializer.Deserialize<Bid>(message);
         }
         catch (Exception e)

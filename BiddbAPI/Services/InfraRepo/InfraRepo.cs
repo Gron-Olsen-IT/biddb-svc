@@ -19,6 +19,7 @@ public class InfraRepo : IInfraRepo
     {
         try
         {
+            _logger.LogInformation($"InfraRepo: Updating max bid for auction: {auctionId}, to: {maxBid}");
             HttpClient httpClient = new HttpClient();
             var response = await httpClient.PatchAsync($"{INFRA_CONN}/auctions/{auctionId}/?maxBid={maxBid}", null);
             return response.StatusCode;
@@ -44,7 +45,5 @@ public class InfraRepo : IInfraRepo
             _logger.LogError(e.Message);
             throw new Exception(e.Message);
         }
-
-
     }
 }
