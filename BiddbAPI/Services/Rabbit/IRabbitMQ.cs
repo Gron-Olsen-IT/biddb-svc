@@ -2,5 +2,5 @@
 namespace BiddbAPI.Models;
 public interface IRabbitMQBot
 {
-    Task<BidDTO?> CheckForMessage(string messageQueue);
+    Task<Bid?> CheckForMessage(string messageQueue);
 }

@@ -17,19 +17,19 @@ public class BidDbService : IBidDbService
         _infraRepo = infraRepo;
     }
 
-    public async Task<Bid> Post(BidDTO bidDTO)
+    public async Task<Bid> Post(Bid bid)
     {
         try
         {
-            _logger.LogInformation($"DbService: Posting bid: {bidDTO}");
-            Bid previousMaxBid = new(await _infraRepo.GetMaxBid(bidDTO.AuctionId));
+            _logger.LogInformation($"DbService: Posting bid: {bid}");
+            Bid previousMaxBid = new(await _infraRepo.GetMaxBid(bid.AuctionId));
             _logger.LogInformation($"DbService: Previous max bid: {previousMaxBid.Offer}");
-            if(previousMaxBid.Offer >= bidDTO.Offer)
+            if(previousMaxBid.Offer >= bid.Offer)
             {
                 throw new Exception("Offer is lower than current max bid");
             }
-            Bid postedBid = await _bidDbRepo.AddBid(new(bidDTO)) ?? throw new Exception("Bid was not posted");
-            await _infraRepo.UpdateMaxBid(bidDTO.AuctionId, postedBid.Offer);
+            Bid postedBid = await _bidDbRepo.AddBid(bid) ?? throw new Exception("Bid was not posted");
+            await _infraRepo.UpdateMaxBid(bid.AuctionId, postedBid.Offer);
             return postedBid;
         }
         catch (Exception e)
