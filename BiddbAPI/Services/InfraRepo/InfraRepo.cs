@@ -34,6 +34,7 @@ public class InfraRepo : IInfraRepo
 
     public async Task<Bid> GetMaxBid(string auctionId)
     {
+        _logger.LogInformation($"InfraRepo: Getting max bid for auction: {auctionId}");
         try
         {
             HttpClient httpClient = new();
