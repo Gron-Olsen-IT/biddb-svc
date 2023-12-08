@@ -17,25 +17,37 @@ public class BidDbService : IBidDbService
         _infraRepo = infraRepo;
     }
 
-    public async Task<Bid> Post(BidDTO bidDTO)
+public async Task<Bid> Post(BidDTO bidDTO)
+{
+    try
     {
-        try
+        _logger.LogInformation($"DbService: Posting bid: {bidDTO}");
+        var previousMaxBid = await _infraRepo.GetMaxBid(bidDTO.AuctionId);
+
+        // Handle the scenario where there are no existing bids
+        if (previousMaxBid == null)
         {
-            _logger.LogInformation($"DbService: Posting bid: {bidDTO}");
-            Bid previousMaxBid = new(await _infraRepo.GetMaxBid(bidDTO.AuctionId));
+            _logger.LogInformation("DbService: No existing bids for this auction.");
+        }
+        else
+        {
             _logger.LogInformation($"DbService: Previous max bid: {previousMaxBid.Offer}");
-            if(previousMaxBid.Offer >= bidDTO.Offer)
+            // Check if the new bid is lower than or equal to the current max bid
+            if (previousMaxBid.Offer >= bidDTO.Offer)
             {
                 throw new Exception("Offer is lower than current max bid");
             }
-            Bid postedBid = await _bidDbRepo.AddBid(new(bidDTO)) ?? throw new Exception("Bid was not posted");
-            await _infraRepo.UpdateMaxBid(bidDTO.AuctionId, postedBid.Offer);
-            return postedBid;
         }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-            throw new Exception(e.Message);
-        }
+
+        Bid postedBid = await _bidDbRepo.AddBid(new Bid(bidDTO)) ?? throw new Exception("Bid was not posted");
+        await _infraRepo.UpdateMaxBid(bidDTO.AuctionId, postedBid.Offer);
+        return postedBid;
     }
+    catch (Exception e)
+    {
+        _logger.LogError(e.Message);
+        throw new Exception(e.Message);
+    }
+}
+
 }

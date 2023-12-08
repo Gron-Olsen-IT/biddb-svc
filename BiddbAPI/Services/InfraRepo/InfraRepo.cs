@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using BiddbAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,7 @@ public class InfraRepo : IInfraRepo
 
     }
 
+/*
     public async Task<BidDTO> GetMaxBid(string auctionId)
     {
         _logger.LogInformation($"InfraRepo: Getting max bid for auction: {auctionId}");
@@ -47,4 +49,41 @@ public class InfraRepo : IInfraRepo
             throw new Exception(e.Message);
         }
     }
+    */
+
+    public async Task<BidDTO?> GetMaxBid(string auctionId)
+{
+    _logger.LogInformation($"InfraRepo: Getting max bid for auction: {auctionId}");
+    try
+    {
+        HttpClient httpClient = new();
+        HttpResponseMessage response = await httpClient.GetAsync($"{INFRA_CONN}/bids/max/{auctionId}");
+        
+        if (response.IsSuccessStatusCode)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (!string.IsNullOrEmpty(responseContent))
+            {
+                return JsonSerializer.Deserialize<BidDTO?>(responseContent);
+            }
+            else
+            {
+                // Handle empty or null response
+                return null;
+            }
+        }
+        else
+        {
+            // Handle non-success status code
+            _logger.LogError($"Failed to get max bid: {response.StatusCode}");
+            return null;
+        }
+    }
+    catch (Exception e)
+    {
+        _logger.LogError(e.Message);
+        throw;
+    }
+}
+
 }
