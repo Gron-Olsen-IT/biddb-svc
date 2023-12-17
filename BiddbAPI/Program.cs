@@ -7,13 +7,14 @@ using System.Threading.RateLimiting;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
+Console.WriteLine("Starting delay");
 Task.Delay(20000).Wait();
 try
 {
     IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<BidDbWorker>();
+        //services.AddHostedService<BidDbWorker>();
         services.AddScoped<IBidDbService, BidDbService>();
         services.AddScoped<IInfraRepo, InfraRepo>();
         services.AddScoped<IBidDbRepo, BidDbRepoMongo>();
