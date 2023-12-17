@@ -14,10 +14,15 @@ try
     IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        //services.AddHostedService<BidDbWorker>();
+        Console.WriteLine("Injecting BidDbWorker");
+        services.AddHostedService<BidDbWorker>();
+        Console.WriteLine("Injecting BidDbService");
         services.AddScoped<IBidDbService, BidDbService>();
+        Console.WriteLine("Injecting InfraRepo");
         services.AddScoped<IInfraRepo, InfraRepo>();
+        Console.WriteLine("Injecting BidDbRepoMongo");
         services.AddScoped<IBidDbRepo, BidDbRepoMongo>();
+        Console.WriteLine("Injecting RabbitMQBot");
         services.AddScoped<IRabbitMQBot, RabbitMQBot>();
         
     })
